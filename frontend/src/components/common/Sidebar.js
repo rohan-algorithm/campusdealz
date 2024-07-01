@@ -1,39 +1,98 @@
-import React from 'react';
-import Avatar from '../User/Avatar';
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const Sidebar = () => {
+const navItems = [
+  {
+    text: "Dashboard",
+  },
+  {
+    text: "Transactions",
+  },
+  {
+    text: "Line",
+  },
+  {
+    text: "Friends",
+  },
+];
+
+const Sidebar = ({
+  user,
+  drawerWidth,
+  isSidebarOpen,
+  setIsSidebarOpen,
+  isNonMobile,
+}) => {
+  const { pathname } = useLocation();
+  const [active, setActive] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setActive(pathname.substring(1));
+  }, [pathname]);
+
+  const handleSidebarToggle = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const handleSidebarClose = () => {
+    setIsSidebarOpen(false);
+  };
+
   return (
-    <div className="drawer z-50"> {/* Increased z-index */}
-      <input id="my-drawer" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content">
-        <label htmlFor="my-drawer" className="btn btn-primary drawer-button">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M4 6h16M4 12h16M4 18h7"
-            />
-          </svg>
-        </label>
-      </div> 
-      <div className="drawer-side z-50"> {/* Increased z-index */}
-        <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
-        <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
-          {/* Sidebar content here */}
-          <li><Avatar/></li>
-          <li><a>Sidebar Item 1</a></li>
-          <li><a>Sidebar Item 2</a></li>
-        </ul>
-      </div>
+    <div>
+      {isSidebarOpen && (
+        <div
+          className={`bg-base-100 text-primary-content
+ h-screen fixed top-0 left-0 z-40 transition duration-300 ease-in-out ${
+            isNonMobile ? `w-${drawerWidth}` : 'w-full'
+          }`}
+        >
+          <div className="p-6 flex justify-between items-center">
+            <h1 className="text-2xl font-bold">ExpenditureXpert</h1>
+            <button
+              className="text-white focus:outline-none"
+              onClick={handleSidebarClose}
+            >
+              Close
+            </button>
+          </div>
+          <ul className="mt-6">
+            {navItems.map(({ text }, index) => (
+              <li key={index}>
+                <button
+                  className={`flex items-center space-x-3 px-4 py-2 w-full hover:bg-gray-200 focus:outline-none ${
+                    active === text.toLowerCase() ? "bg-gray-200" : ""
+                  }`}
+                  onClick={() => {
+                    navigate(`/${text.toLowerCase()}`);
+                    setActive(text.toLowerCase());
+                  }}
+                >
+                  <span className="flex-1">{text}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+          <div className="absolute bottom-6 left-0 w-full border-t border-gray-800 p-4">
+            <div className="flex items-center gap-2">
+              <img
+                src={user.profile}
+                alt="profile"
+                className="h-10 w-10 rounded-full object-cover"
+              />
+              <div className="text-left">
+                <p className="font-semibold text-lg text-primary-content">
+                  {user.name}
+                </p>
+                <p className="text-xs text-primary-content">{user.email}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
-}
+};
 
 export default Sidebar;

@@ -1,37 +1,69 @@
 import Product from '../models/product.js';
+import  Cloudinary  from '../utils/cloudinary.js'
+
 
 export const createProduct = async (req, res) => {
-  const { title, description, price, seller } = req.body;
+    const { title, description, price ,college,seller} = req.body;
 
-  try {
-    const newProduct = new Product({
-      title,
-      description,
-      price,
-      seller
-    });
+    const files = req.files; // Array of files
+  
+    try {
+      // Upload images to Cloudinary
+      const imageUploadPromises = files.map(file =>
+        new Promise((resolve, reject) => {
+          const uploadStream = Cloudinary.uploader.upload_stream(
+            { folder: 'products' },
+            (error, result) => {
+              if (error) reject(error);
+              else resolve(result.public_id); // URL of the uploaded image
+            }
+          );
+          uploadStream.end(file.buffer);
+        })
+      );
+  
+      const uploadResults = await Promise.all(imageUploadPromises);
+  
+      // Extract URLs from the upload results
+      const imageUrls = uploadResults;
+  
+      // Create new product
+      const newProduct = new Product({
+        title,
+        description,
+        images: imageUrls,
+        price,
+        college,
+        seller
+      });
+      console.log(newProduct);
+      const product = await newProduct.save();
+      res.json(product);
+  
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server error');
+    }
+  };
 
-    const product = await newProduct.save();
-    res.json(product);
 
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
-  }
-};
 
 export const getProducts = async (req, res) => {
+
+  const { college } = req.query;
+  console.log(college);
+  // console.log(req.params.id);
   try {
-    const products = await Product.find();
+    const products = await Product.find({ college });
     res.json(products);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
+  } catch (error) {
+    res.status(500).send(error);
   }
 };
 
 export const getProductById = async (req, res) => {
   try {
+    // console.log(req.params.id);
     const product = await Product.findById(req.params.id);
     if (!product) {
       return res.status(404).json({ msg: 'Product not found' });

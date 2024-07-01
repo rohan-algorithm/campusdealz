@@ -5,6 +5,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import productRoute from "./routes/productRoute.js"
+import userRoute from "./routes/userRoute.js"
 
 /* CONFIGURATION */
 dotenv.config();
@@ -19,7 +20,8 @@ app.use(cors());
 
 /* ROUTES */
 
-app.use("/api/v1", productRoute);
+app.use("/api/product", productRoute);
+app.use("/api/user", userRoute);
 // app.use("/api/v2", expanse);
 // app.use("/api/v3", friends);
 // app.use("/api/v4", userInfo);

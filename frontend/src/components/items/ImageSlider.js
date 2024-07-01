@@ -1,31 +1,16 @@
-import React from 'react'
+import React from 'react';
 
-const ImageSlider = () => {
+const ImageSlider = ({ images }) => {
+  console.log(images);
   return (
     <div className="carousel rounded-box">
-  <div className="carousel-item">
-    <img src="https://img.daisyui.com/images/stock/photo-1559703248-dcaaec9fab78.jpg" alt="Burger" />
-  </div> 
-  <div className="carousel-item">
-    <img src="https://img.daisyui.com/images/stock/photo-1565098772267-60af42b81ef2.jpg" alt="Burger" />
-  </div> 
-  <div className="carousel-item">
-    <img src="https://img.daisyui.com/images/stock/photo-1572635148818-ef6fd45eb394.jpg" alt="Burger" />
-  </div> 
-  <div className="carousel-item">
-    <img src="https://img.daisyui.com/images/stock/photo-1494253109108-2e30c049369b.jpg" alt="Burger" />
-  </div> 
-  <div className="carousel-item">
-    <img src="https://img.daisyui.com/images/stock/photo-1550258987-190a2d41a8ba.jpg" alt="Burger" />
-  </div> 
-  <div className="carousel-item">
-    <img src="https://img.daisyui.com/images/stock/photo-1559181567-c3190ca9959b.jpg" alt="Burger" />
-  </div> 
-  <div className="carousel-item">
-    <img src="https://img.daisyui.com/images/stock/photo-1601004890684-d8cbf643f5f2.jpg" alt="Burger" />
-  </div>
-</div>
-  )
-}
+      {images.map((image, index) => (
+        <div key={index} className="carousel-item w-full h-40 sm:h-48 md:h-64 lg:h-80 xl:h-96">
+          <img src={"https://res.cloudinary.com/do1t9yc6x/image/upload/v1719772892/"+image} alt={`Slide ${index + 1}`} className="w-full h-full object-cover" />
+        </div>
+      ))}
+    </div>
+  );
+};
 
-export default ImageSlider
+export default ImageSlider;

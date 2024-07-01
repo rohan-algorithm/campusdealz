@@ -1,36 +1,39 @@
-import ImageSlider from "./ImageSlider"
-import ItemStats from "./ItemStats"
-import { Table } from "./Table"
-import Avatar from "../User/Avatar"
-const ItemPage = () => {
-  return (
-    <div className="grid grid-cols-3 p-6">
-       <div className="col-span-2">
-       <ImageSlider/>
-       <div className="flex flex-row justify-between">
-       <h1 className="text-xl p-5">Product Name</h1>
-       <div class="stat-value">$89,400</div>
-       </div>
-       <div class="collapse collapse-arrow bg-base-200  p-5">
-  <input type="radio" name="my-accordion-2" /> 
-  <div class="collapse-title text-xl font-medium">
-    Description
-  </div>
-  <div class="collapse-content"> 
-    <p>hello</p>
-  </div>
-  <Table/>
-</div>
-       </div>
-       <div>
-       <ItemStats/>
-       <div className="justify-center p-3">
-       
-        <Avatar/>
-       </div>
-       </div>
-    </div>
-  )
-}
+import React from 'react';
+import { useLocation } from 'react-router-dom';
+import ImageSlider from './ImageSlider';
+import ItemStats from './ItemStats';
+import { Table } from './Table';
+import Avatar from '../User/Avatar';
 
-export default ItemPage
+const ItemPage = (props) => {
+  const location = useLocation();
+  const { product } = location.state;
+
+  return (
+    <div className="flex flex-wrap m-8">
+      <div className="w-full lg:w-4/5 mb-4 lg:mb-0">
+        <ImageSlider images={product.images} />
+        <div className="flex flex-row justify-between">
+          <h1 className="text-xl p-5">{product.title}</h1>
+          <div className="stat-value">₹{product.price}</div>
+        </div>
+        <div className="collapse collapse-arrow bg-base-200 p-5">
+          <input type="radio" name="my-accordion-2" /> 
+          <div className="collapse-title text-xl font-medium">Description</div>
+          <div className="collapse-content">
+            <p>{product.description}</p>
+          </div>
+        </div>
+        <Table />
+      </div>
+      <div className="w-full lg:w-1/5">
+        {/* <ItemStats /> */}
+        <div className="flex justify-center p-3">
+          <Avatar user={props}/>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ItemPage;

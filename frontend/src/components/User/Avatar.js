@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Avatar = () => {
+const Avatar = (props) => {
   return (
     <div className="card relative w-full glass ">
  <div className="avatar  justify-center pt-5">
@@ -9,7 +9,7 @@ const Avatar = () => {
   </div>
 </div>
   <div className="card-body justify-normal">
-    <h2 className="card-title">Rohan Rao</h2>
+    <h2 className="card-title">{props.name}</h2>
     <p>How to park your car at your garage?</p>
     <div className="card-actions justify-end">
     <button class="btn relative w-full">
